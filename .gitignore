@@ -1,0 +1,59 @@
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.aar
+
+# Files for the Android tool to store data
+.gradle/
+.idea/
+.kotlin/
+/local.properties
+/captures/
+.externalNativeBuild/
+.cxx/
+/gradle-wrapper/
+
+# Local configuration file (sdk location)
+local.properties
+
+# A file used by the IDE to store settings (e.g., UI layout)
+.idea/workspace.xml
+
+# IntelliJ IDEA-specific files (e.g., project structure, run configurations)
+.idea/libraries/
+.idea/modules.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/codeStyles/
+.idea/.name
+.idea/gradle.xml
+# .idea/kotlin/ # Эта строка уже, по сути, охватывается .kotlin/ выше, но иногда может быть полезна для более старых проектов или специфичных настроек.
+                 # Обычно, если вы игнорируете .kotlin/ на корневом уровне, этого достаточно.
+
+# Android Studio generates this file to link to external NDK installations
+.android/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Temporary files (e.g., for Lint)
+lint-results.html
+lint-results.xml
+
+# Used by Android Studio for Instant Run
+instant-run/
+
+# Android Test Report
+test-results/
+
+# Crashlytics/Firebase files
+firebase-debug.log
+crashlytics.properties
+
+# AVD emulator files
+.android/avd/
+
+# Android Studio configuration
+.android/

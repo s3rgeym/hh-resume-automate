@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">HH Resume Automate</string>
+    <string name="logout">Выход</string>
+    <string name="home">Главная</string>
+    <string name="advanced_options">Расширенные настройки</string>
+    <string name="access_token">Access Token</string>
+    <string name="refresh_token">Refresh Token</string>
+    <string name="token_expiry">Действителен до</string>
+    <string name="refresh_access_token">Обновить Access Token</string>
+    <string name="token_refresh_success">Токен успешно обновлен</string>
+    <string name="token_refresh_error">Ошибка при обновлении токена: %s</string>
+    <string name="home_content_description">Перейти на главный экран</string>
+    <string name="advanced_options_content_description">Перейти к расширенным опциям</string>
+    <string name="technical_support">Техническая поддержка</string>
+    <string name="technical_support_content_description">Открыть чат с технической поддержкой</string>
+    <string name="about_author">Об авторе</string>
+    <string name="about_author_content_description">Открыть информацию об авторе</string>
+    <string name="logout_content_description">Выйти из аккаунта</string>
+    <string name="menu_content_description">Открыть меню навигации</string>
+    <string name="drawer_greeting">Здравствуйте, %1$s %2$s!</string>
+</resources>

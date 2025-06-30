@@ -1,0 +1,62 @@
+name: Android Release Build
+
+on:
+  push:
+    branches: [main] # Сборка при пуше в main
+    tags: # Сборка при пуше любого тега, соответствующего шаблону
+      - 'v*.*.*' # Например, v1.0.0, v1.2.3, v2.0.0-beta
+  workflow_dispatch: # Позволяет запускать вручную из UI GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Decode keystore from secrets
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > release.keystore
+
+      - name: Build signed release App Bundle
+        env:
+          KEYSTORE_FILE_PATH: release.keystore
+          STORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS_NAME: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew :app:bundleRelease
+
+      - name: Upload App Bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aab
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      # Дополнительный шаг: Создание GitHub Release (Опционально, но рекомендуется)
+      # Это создаст "Релиз" на GitHub с прикрепленным AAB файлом,
+      # что очень удобно для отслеживания версий.
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/') # Только если сборка вызвана тегом
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/bundle/release/app-release.aab
+          name: Release ${{ github.ref_name }} # Имя релиза, например "Release v1.0.0"
+          tag_name: ${{ github.ref_name }} # Тег, который вызвал сборку
+          body: |
+            # Release ${{ github.ref_name }}
+
+            This is an automated release.
+
+            # Changelog
+            (Add your changelog here) # Замените на реальный список изменений
