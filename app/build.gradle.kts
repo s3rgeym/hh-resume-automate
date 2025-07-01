@@ -20,7 +20,8 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(project.findProperty("KEYSTORE_PATH") as String)
+            // При сборке мы находимся в app/, а ключ лежит выше
+            storeFile = file("../" + (project.findProperty("KEYSTORE_PATH") as String))
             storePassword = project.findProperty("KEYSTORE_PASSWORD") as String
             keyAlias = project.findProperty("KEY_ALIAS") as String
             keyPassword = project.findProperty("KEY_PASSWORD") as String
