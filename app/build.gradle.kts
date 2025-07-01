@@ -20,10 +20,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(project.findProperty("KEYSTORE_FILE_PATH") as String)
-            storePassword = project.findProperty("STORE_PASS") as String
-            keyAlias = project.findProperty("KEY_ALIAS_NAME") as String
-            keyPassword = project.findProperty("KEY_PASS") as String
+            storeFile = file(project.findProperty("KEYSTORE_PATH") as String)
+            storePassword = project.findProperty("KEYSTORE_PASSWORD") as String
+            keyAlias = project.findProperty("KEY_ALIAS") as String
+            keyPassword = project.findProperty("KEY_PASSWORD") as String
         }
     }
 
