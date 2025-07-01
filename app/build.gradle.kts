@@ -19,6 +19,8 @@ android {
     }
 
     signingConfigs {
+        // Эти настройки нужны только через сборки через Github Workflow.
+        // Локально же они ммешают.
         if (
             project.hasProperty("KEYSTORE_PATH") &&
             project.hasProperty("KEYSTORE_PASSWORD") &&
@@ -36,7 +38,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false // слишком долго компилируется
+            isMinifyEnabled = false // слишком долго компилируется, а ресурс тактов на компиляцию ограничен
             if (signingConfigs.findByName("release") != null) {
                 signingConfig = signingConfigs.getByName("release")
             }
