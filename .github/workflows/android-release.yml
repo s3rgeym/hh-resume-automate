@@ -30,10 +30,10 @@ jobs:
 
       - name: Build signed release APK
         env:
-          KEYSTORE_FILE_PATH: release.keystore
-          STORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS_NAME: ${{ secrets.KEY_ALIAS }}
-          KEY_PASS: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PATH: release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew :app:assembleRelease
 
       - name: Upload APK artifact
