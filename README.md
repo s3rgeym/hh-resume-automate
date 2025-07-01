@@ -1,5 +1,7 @@
 # HH Resume Automate
 
+![GitHub Release](https://img.shields.io/github/v/release/s3rgeym/hh-resume-automate)
+
 Android-риложение для автоматизации действий с резюме на HH.RU таких как рассылка откликов на вакансии и
 автоподнятие резюме бесплатно вместо 199р/неделя.
 
