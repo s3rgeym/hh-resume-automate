@@ -205,7 +205,7 @@ class ApiClient(
         // ru.hh.android/7.122.11395, Device: 23053RN02Y, Android OS: 13 (UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
 
         // Рандомный:
-        // ru.hh.android/6.149.14616, Device: ZV6EK4FGOR, Android OS: 12 (UUID: c482b404-b4d8-4f6b-9ac0-48be9367a42a)
+        // ru.hh.android/6.149.14615, Device: ZV6EK4FGOR, Android OS: 12 (UUID: a482b404-b4d8-4f6b-9ac0-48be9367a42a)
         return "ru.hh.android/$major.$minor.$patch, Device: $randomDeviceModel, Android OS: $androidOsVersion (UUID: $randomUuid)"
     }
 
