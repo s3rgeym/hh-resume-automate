@@ -12,6 +12,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.random.Random
 
 sealed class ApiException(val json: Map<String, Any?>, message: String) : Exception(message) {
 
@@ -185,15 +186,31 @@ class ApiClient(
         return ub.build().toString()
     }
 
+    protected fun generateRandomDeviceModel(): String {
+        val charset = ('A'..'Z') + ('0'..'9')
+        return (1..10)
+            .map { charset.random(Random) }
+            .joinToString("")
+    }
+
     protected fun generateUserAgent(): String {
+        val major = Random.nextInt(6, 7)
+        val minor = Random.nextInt(100, 150)
+        val patch = Random.nextInt(10000, 15000)
+        val randomDeviceModel = generateRandomDeviceModel()
+        val androidOsVersion = Random.nextInt(12, 15)
         val randomUuid = UUID.randomUUID().toString()
-        return "ru.hh.android/7.122.11395, Device: 23053RN02Y, Android OS: 13 (UUID: $randomUuid)"
+
+        // ru.hh.android/7.122.11395, Device: 23053RN02Y, Android OS: 13 (UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+        return "ru.hh.android/$major.$minor.$patch, Device: $randomDeviceModel, Android OS: $androidOsVersion (UUID: $randomUuid)"
     }
 
     protected fun defaultHeaders(): Headers {
+        val userAgent = generateUserAgent()
+        System.err.println("Random User-Agent: $userAgent")
         return Headers.Builder().apply {
             add("Accept", "*/*")
-            add("User-Agent", generateUserAgent())
+            add("User-Agent", userAgent)
         }.build()
     }
 
