@@ -194,14 +194,18 @@ class ApiClient(
     }
 
     protected fun generateUserAgent(): String {
-        val major = Random.nextInt(6, 7)
+        val major = Random.nextInt(5, 7)
         val minor = Random.nextInt(100, 150)
         val patch = Random.nextInt(10000, 15000)
         val randomDeviceModel = generateRandomDeviceModel()
-        val androidOsVersion = Random.nextInt(12, 15)
+        val androidOsVersion = Random.nextInt(10, 15)
         val randomUuid = UUID.randomUUID().toString()
 
+        // Оригинальный:
         // ru.hh.android/7.122.11395, Device: 23053RN02Y, Android OS: 13 (UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+
+        // Рандомный:
+        // ru.hh.android/6.149.14616, Device: ZV6EK4FGOR, Android OS: 12 (UUID: c482b404-b4d8-4f6b-9ac0-48be9367a42a)
         return "ru.hh.android/$major.$minor.$patch, Device: $randomDeviceModel, Android OS: $androidOsVersion (UUID: $randomUuid)"
     }
 
