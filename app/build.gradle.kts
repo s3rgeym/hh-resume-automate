@@ -20,36 +20,24 @@ android {
 
     signingConfigs {
         create("release") {
-            // Читаем свойства проекта, которые передаются через переменные окружения
-            val keystoreFile = project.findProperty("KEYSTORE_FILE_PATH") as String?
-            val storePassword = project.findProperty("STORE_PASS") as String?
-            val keyAlias = project.findProperty("KEY_ALIAS_NAME") as String?
-            val keyPassword = project.findProperty("KEY_PASS") as String?
-
-            if (keystoreFile != null && storePassword != null && keyAlias != null && keyPassword != null) {
-                storeFile = file(keystoreFile)
-                storePassword = storePassword
-                keyAlias = keyAlias
-                keyPassword = keyPassword
-            } else {
-                logger.warn("Release signing configuration is missing one or more environment variables. Check GitHub Secrets and workflow config.")
-                // Для CI/CD, чтобы сборка не продолжалась без подписи
-                // Вы можете выбросить исключение, чтобы пайплайн провалился
-                // throw GradleException("Missing signing properties for release build!")
-            }
+            storeFile = file(project.findProperty("KEYSTORE_FILE_PATH") as String)
+            storePassword = project.findProperty("STORE_PASS") as String
+            keyAlias = project.findProperty("KEY_ALIAS_NAME") as String
+            keyPassword = project.findProperty("KEY_PASS") as String
         }
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
-        debug {
+
+        getByName("debug") {
             isMinifyEnabled = false
         }
     }
