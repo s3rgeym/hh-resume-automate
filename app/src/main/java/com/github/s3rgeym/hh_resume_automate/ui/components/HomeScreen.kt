@@ -85,9 +85,7 @@ fun HomeScreen(
       OutlinedButton(
         onClick = { dropdownExpanded = true },
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(4.dp) // ✅ Пример: слегка скругленные углы (можно 0.dp для квадратных)
-        // Или shape = MaterialTheme.shapes.small // Используем форму из темы
-        // Или shape = MaterialTheme.shapes.extraSmall // Для Material 3 есть такие
+        shape = MaterialTheme.shapes.extraSmall,
         // Или shape = RectangleShape // Для полностью квадратных углов
       ) {
         Text(
