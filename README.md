@@ -12,11 +12,17 @@ Android-риложение для автоматизации действий с
 * Возможно указать поисковой запрос для более точного поиска вакансий. Ознакомьтесь с [языком поисковых запросов](https://hh.ru/article/1175). Если поисковую строку не указывать, то будут учитываться поисковые фильтры, указанные на сайте.
 * Поддерживает шаблоны сопроводительных писем.
 
-Скриншоты:
-
-![image](https://github.com/user-attachments/assets/c4f2f077-392d-4ef6-8ba7-73f78623a840)
-
 ---
 
 - [Скачать готовый APK можно тут](../../releases)
 - [Как установить APK](https://hi-tech.mail.ru/review/102312-kak-ustanovit-apk-na-android/)
+
+-- 
+
+Скриншоты:
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/2db417dc-d905-449b-919e-0198108e0701" width="300px">
+  <img src="https://github.com/user-attachments/assets/e206b347-5669-4dbb-bf16-2101f123825a" width="300px">
+  <img src="https://github.com/user-attachments/assets/17094570-cf25-4450-83bd-4808769d3ce5" width="300px">
+</div>
