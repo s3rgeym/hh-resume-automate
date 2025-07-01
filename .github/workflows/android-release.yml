@@ -2,11 +2,9 @@ name: Android Release Build
 
 on:
   push:
-    # Сборка по тегу
     tags:
-      - 'v*.*.*'
-  # Позволяет запускать вручную из UI GitHub
-  workflow_dispatch:
+      - 'v*.*.*'  # Автозапуск по тэгам
+  workflow_dispatch:  # Ручной запуск из UI
 
 jobs:
   build:
@@ -21,7 +19,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: 'gradle'
+          cache: gradle
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
@@ -30,33 +28,31 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > release.keystore
 
-      - name: Build signed release APK # Изменено название шага
+      - name: Build signed release APK
         env:
           KEYSTORE_FILE_PATH: release.keystore
           STORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS_NAME: ${{ secrets.KEY_ALIAS }}
           KEY_PASS: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew :app:assembleRelease # <-- Изменено: assembleRelease вместо bundleRelease
+        run: ./gradlew :app:assembleRelease
 
-      - name: Upload APK artifact # Изменено название шага
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk # <-- Изменено: release-apk вместо release-aab
-          path: app/build/outputs/apk/release/app-release.apk # <-- Изменено: путь к APK
+          name: release-apk
+          path: app/build/outputs/apk/release/app-release.apk
 
-      # Дополнительный шаг: Создание GitHub Release (Опционально, но рекомендуется)
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          # Прикрепляем APK файл
-          files: app/build/outputs/apk/release/app-release.apk # <-- Изменено: путь к APK
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
+          files: app/build/outputs/apk/release/app-release.apk
           body: |
             # Release ${{ github.ref_name }}
 
             This is an automated release.
 
-            # Changelog
+            ## Changelog
             (Add your changelog here)
