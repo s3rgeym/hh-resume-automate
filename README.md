@@ -16,7 +16,7 @@ Android-риложение для автоматизации действий с
 
 - [Скачать готовый APK можно в релизах](../../releases).
 - [Как установить APK](https://hi-tech.mail.ru/review/102312-kak-ustanovit-apk-na-android/).
-- [Канал в Telegram](https://t.me/hh_resume_automate).
+- [Канал в Telegram](https://t.me/hh_resume_automate) для тех у кого нет аккаунта на **Github** чтобы сообщить о проблеме.
 
 -- 
 
