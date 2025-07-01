@@ -21,7 +21,7 @@ Android-риложение для автоматизации действий с
 
 Скриншоты:
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
   <img src="https://github.com/user-attachments/assets/2db417dc-d905-449b-919e-0198108e0701" width="300px">
   <img src="https://github.com/user-attachments/assets/e206b347-5669-4dbb-bf16-2101f123825a" width="300px">
   <img src="https://github.com/user-attachments/assets/17094570-cf25-4450-83bd-4808769d3ce5" width="300px">
