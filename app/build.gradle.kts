@@ -19,19 +19,27 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            // При сборке мы находимся в app/, а ключ лежит выше
-            storeFile = file("../" + (project.findProperty("KEYSTORE_PATH") as String))
-            storePassword = project.findProperty("KEYSTORE_PASSWORD") as String
-            keyAlias = project.findProperty("KEY_ALIAS") as String
-            keyPassword = project.findProperty("KEY_PASSWORD") as String
+        if (
+            project.hasProperty("KEYSTORE_PATH") &&
+            project.hasProperty("KEYSTORE_PASSWORD") &&
+            project.hasProperty("KEY_ALIAS") &&
+            project.hasProperty("KEY_PASSWORD")
+        ) {
+            create("release") {
+                storeFile = file("../" + project.property("KEYSTORE_PATH") as String)
+                storePassword = project.property("KEYSTORE_PASSWORD") as String
+                keyAlias = project.property("KEY_ALIAS") as String
+                keyPassword = project.property("KEY_PASSWORD") as String
+            }
         }
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false // слишком долго компилируется
-            signingConfig = signingConfigs.getByName("release")
+            if (signingConfigs.findByName("release") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
