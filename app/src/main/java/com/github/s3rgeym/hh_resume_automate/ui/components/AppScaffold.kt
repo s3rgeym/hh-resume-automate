@@ -3,7 +3,6 @@ package com.github.s3rgeym.hh_resume_automate.ui.components
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,9 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face // Используется для "Техническая поддержка"
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Info // Will be used for "Домашняя страница"
+import androidx.compose.material.icons.filled.Link // Potentially a better icon for links/homepage
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -62,8 +61,8 @@ fun AppScaffold(
     val userProfileState = remember { UserProfileState() }
     val context = LocalContext.current
 
-    val githubUrl = "https://github.com/s3rgeym"
-    val telegramSupportUrl = "https://t.me/hh_resume_automate"
+    val githubRepositoryUrl = "https://github.com/s3rgeym/hh_resume_automate" // ИЗМЕНЕНО: Ссылка на репозиторий
+    // val telegramSupportUrl = "https://t.me/hh_resume_automate" // УДАЛЕНО: Больше не используется
 
     // Функция для выхода из аккаунта
     val logout: () -> Unit = {
@@ -128,23 +127,13 @@ fun AppScaffold(
                         }
                     )
 
+                    // НОВЫЙ ПУНКТ МЕНЮ: Домашняя страница с ссылкой на репозиторий
                     NavigationDrawerItem(
-                        label = { Text(stringResource(R.string.technical_support)) },
-                        icon = { Icon(Icons.Filled.Face, contentDescription = stringResource(R.string.technical_support_content_description)) },
+                        label = { Text(stringResource(R.string.homepage)) }, // Добавляем новую строку в strings.xml
+                        icon = { Icon(Icons.Filled.Info, contentDescription = stringResource(R.string.homepage_content_description)) }, // Используем Icons.Filled.Info или Icons.Filled.Link
                         selected = false,
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(telegramSupportUrl))
-                            context.startActivity(intent)
-                            scope.launch { drawerState.close() }
-                        }
-                    )
-
-                    NavigationDrawerItem(
-                        label = { Text(stringResource(R.string.about_author)) },
-                        icon = { Icon(Icons.Filled.Info, contentDescription = stringResource(R.string.about_author_content_description)) },
-                        selected = false,
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubRepositoryUrl))
                             context.startActivity(intent)
                             scope.launch { drawerState.close() }
                         }
