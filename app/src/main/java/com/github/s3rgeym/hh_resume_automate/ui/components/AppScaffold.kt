@@ -3,6 +3,7 @@ package com.github.s3rgeym.hh_resume_automate.ui.components
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,11 +12,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info // Will be used for "Домашняя страница"
-import androidx.compose.material.icons.filled.Link // Potentially a better icon for links/homepage
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -41,7 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.github.s3rgeym.hh_resume_automate.R // Убедитесь, что R здесь доступен
+import com.github.s3rgeym.hh_resume_automate.R
 import com.github.s3rgeym.hh_resume_automate.api.ApiClient
 import com.github.s3rgeym.hh_resume_automate.states.UserProfileState
 import kotlinx.coroutines.launch
@@ -61,22 +62,19 @@ fun AppScaffold(
     val userProfileState = remember { UserProfileState() }
     val context = LocalContext.current
 
-    val githubRepositoryUrl = "https://github.com/s3rgeym/hh_resume_automate" // ИЗМЕНЕНО: Ссылка на репозиторий
-    // val telegramSupportUrl = "https://t.me/hh_resume_automate" // УДАЛЕНО: Больше не используется
+    val githubRepositoryUrl = "https://github.com/s3rgeym/hh-resume-automate"
+    val telegramChannelUrl = "https://t.me/hh_resume_automate"
 
-    // Функция для выхода из аккаунта
     val logout: () -> Unit = {
         with(sharedPrefs.edit()) {
-            clear() // Удаляем все данные аутентификации
-            apply() // Применяем изменения
+            clear()
+            apply()
         }
-        // Переходим на экран авторизации и очищаем Back Stack
         navController.navigate("auth") {
             popUpTo(navController.graph.startDestinationId) { inclusive = true }
         }
     }
 
-    // Загружаем данные пользователя при первом отображении компонента
     LaunchedEffect(Unit) {
         userProfileState.loadUserData(client)
     }
@@ -84,14 +82,12 @@ fun AppScaffold(
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
-                // Column с возможностью прокрутки для содержимого Drawer
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .verticalScroll(rememberScrollState()) // Здесь применяется скролл
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        // Используем stringResource для форматированной строки приветствия
                         text = stringResource(
                             R.string.drawer_greeting,
                             userProfileState.firstName,
@@ -109,8 +105,8 @@ fun AppScaffold(
                         selected = navController.currentDestination?.route == "home",
                         onClick = {
                             navController.navigate("home") {
-                                popUpTo("home") { inclusive = true } // Очищаем Back Stack до home
-                                launchSingleTop = true // Избегаем дублирования home
+                                popUpTo("home") { inclusive = true }
+                                launchSingleTop = true
                             }
                             scope.launch { drawerState.close() }
                         }
@@ -121,19 +117,30 @@ fun AppScaffold(
                         selected = navController.currentDestination?.route == "advancedOptions",
                         onClick = {
                             navController.navigate("advancedOptions") {
-                                launchSingleTop = true // Избегаем дублирования advancedOptions
+                                launchSingleTop = true
                             }
                             scope.launch { drawerState.close() }
                         }
                     )
 
-                    // НОВЫЙ ПУНКТ МЕНЮ: Домашняя страница с ссылкой на репозиторий
                     NavigationDrawerItem(
-                        label = { Text(stringResource(R.string.homepage)) }, // Добавляем новую строку в strings.xml
-                        icon = { Icon(Icons.Filled.Info, contentDescription = stringResource(R.string.homepage_content_description)) }, // Используем Icons.Filled.Info или Icons.Filled.Link
+                        label = { Text(stringResource(R.string.project_page)) },
+                        icon = { Icon(Icons.Filled.Link, contentDescription = stringResource(R.string.project_page_content_description)) },
                         selected = false,
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubRepositoryUrl))
+                            context.startActivity(intent)
+                            scope.launch { drawerState.close() }
+                        }
+                    )
+
+                    // ИЗМЕНЕНО: Канал в Телеграме
+                    NavigationDrawerItem(
+                        label = { Text(stringResource(R.string.telegram_channel)) }, // ИЗМЕНЕНО: Новая строка в strings.xml
+                        icon = { Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.telegram_channel_content_description)) }, // ИЗМЕНЕНО: Новая строка в strings.xml
+                        selected = false,
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(telegramChannelUrl))
                             context.startActivity(intent)
                             scope.launch { drawerState.close() }
                         }
@@ -155,7 +162,7 @@ fun AppScaffold(
             }
         },
         drawerState = drawerState,
-        gesturesEnabled = true, // Включено открытие Drawer свайпом
+        gesturesEnabled = true,
         modifier = Modifier.fillMaxSize()
     ) {
         Scaffold(
@@ -165,7 +172,6 @@ fun AppScaffold(
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch {
-                                // Переключаем состояние Drawer (открыть/закрыть)
                                 if (drawerState.isClosed) {
                                     drawerState.open()
                                 } else {
@@ -190,7 +196,6 @@ fun AppScaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { innerPadding ->
-            // Важно: Применяем padding от Scaffold к содержимому
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -198,7 +203,7 @@ fun AppScaffold(
                     .padding(24.dp, 18.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                content(innerPadding) // Здесь будет отображаться содержимое текущего экрана
+                content(innerPadding)
             }
         }
     }
