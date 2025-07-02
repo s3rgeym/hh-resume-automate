@@ -12,7 +12,9 @@
     <string name="home_content_description">Перейти на главный экран</string>
     <string name="advanced_options_content_description">Перейти к расширенным опциям</string>
     <string name="technical_support">Техническая поддержка</string>
-    <string name="technical_support_content_description">Открыть чат с технической поддержкой</string>
+    <string name="technical_support_content_description">Перейти в Telegram-канал технической поддержки</string>
+    <string name="homepage">Домашняя страница</string>
+    <string name="homepage_content_description">Посетить домашнюю страницу проекта</string>
     <string name="about_author">Об авторе</string>
     <string name="about_author_content_description">Открыть информацию об авторе</string>
     <string name="logout_content_description">Выйти из аккаунта</string>
