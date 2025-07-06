@@ -68,7 +68,7 @@ class VacancyApplyWorker(
                 Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page (no items on current).")
                 delay(pageDelayMillis)
             }
-            
+
             val requestParams = mutableMapOf<String, String>("page" to "$page", "per_page" to "100")
             searchQuery?.takeIf { it.isNotBlank() }?.let {
                 requestParams["text"] = it.trim()
@@ -142,7 +142,7 @@ class VacancyApplyWorker(
                     }
                 }
 
-                
+
                 val payload = mutableMapOf<String, Any>(
                     "resume_id" to resumeId!!,
                     "vacancy_id" to vacancyId
