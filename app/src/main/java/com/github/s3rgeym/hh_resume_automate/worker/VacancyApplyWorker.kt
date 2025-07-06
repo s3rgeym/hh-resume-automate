@@ -65,7 +65,7 @@ class VacancyApplyWorker(
         for (page in 0 until 20) {
             if (page > 1) {
                 val pageDelayMillis = Random.nextLong(1000, 3000)
-                Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page (no items on current).")
+                Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page.")
                 delay(pageDelayMillis)
             }
 
@@ -90,12 +90,7 @@ class VacancyApplyWorker(
             val items = response["items"] as? List<Map<String, Any>>
             if (items.isNullOrEmpty()) {
                 Log.d(TAG, "No items found on page $page, or unexpected response format.")
-                val pages = (response["pages"] as? Number)?.toInt() ?: 0
-                if (page >= pages - 1) {
-                    Log.d(TAG, "Reached last page or processed all available pages ($page of $pages) with no new items.)")
-                    break
-                }
-                continue
+                break
             }
 
             for (vacancy in items) {
@@ -118,20 +113,20 @@ class VacancyApplyWorker(
                 // --- Рандомный просмотр вакансии и аккаунта работодателя с задержками ---
                 if (Random.nextInt(100) < 50) { // 50% шанс просмотра вакансии
                     try {
+                        val viewDelayMillis = Random.nextLong(1000, 3000)
+                        Log.d(TAG, "Задержка на $viewDelayMillis мс перед просмотром вакансии.")
+                        delay(viewDelayMillis)
                         Log.d(TAG, "Просмотр вакансии '$vacancyName'.")
                         client.api("GET", "/vacancies/$vacancyId") // Просмотр вакансии
-                        val viewDelayMillis = Random.nextLong(3000, 5000) // 3 до 5 секунд
-                        Log.d(TAG, "Задержка на $viewDelayMillis мс после просмотра вакансии.")
-                        delay(viewDelayMillis)
 
                         if (Random.nextInt(100) < 25) { // 25% шанс просмотра аккаунта работодателя после просмотра вакансии
                             val employerId = (vacancy["employer"] as? Map<String, Any>)?.get("id")?.toString()
                             if (!employerId.isNullOrEmpty()) {
+                                val employerViewDelayMillis = Random.nextLong(1000, 3000)
+                                Log.d(TAG, "Задержка на $employerViewDelayMillis мc перед просмотром работадетля.")
+                                delay(employerViewDelayMillis)
                                 Log.d(TAG, "Просмотр аккаунта работодателя #$employerId для вакансии '$vacancyName'.")
                                 client.api("GET", "/employers/$employerId") // Просмотр аккаунта работодателя
-                                val employerViewDelayMillis = Random.nextLong(3000, 5000) // 3 до 5 секунд
-                                Log.d(TAG, "Задержка на $employerViewDelayMillis мс после просмотра аккаунта работодателя.")
-                                delay(employerViewDelayMillis)
                             }
                         }
                     } catch (e: ApiException) {
@@ -162,6 +157,9 @@ class VacancyApplyWorker(
                 val vacancyUrl = vacancy["alternate_url"]?.toString() ?: "n/a"
 
                 try {
+                    val delayMillis = Random.nextLong(3000, 5000)
+                    Log.d(TAG, "Ожидаем $delayMillis перед откликом.")
+                    delay(delayMillis)
                     client.api("POST", "/negotiations", payload)
                     showNotification("✅ Отклик на $vacancyUrl ($vacancyName)")
                     Log.i(TAG, "Successfully applied to vacancy: $vacancyUrl")
@@ -176,10 +174,6 @@ class VacancyApplyWorker(
                     // Продолжаем цикл, чтобы попытаться откликнуться на другие вакансии
                     continue
                 }
-
-                val delayMillis = Random.nextLong(3000, 5000)
-                Log.d(TAG, "Delaying for $delayMillis ms before next application.")
-                delay(delayMillis)
             }
 
             val pages = (response["pages"] as? Number)?.toInt() ?: 0
