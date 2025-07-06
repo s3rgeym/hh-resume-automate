@@ -63,6 +63,12 @@ class VacancyApplyWorker(
 
     private suspend fun applySimilarVacancies() {
         for (page in 0 until 20) {
+            if (page > 1) {
+                val pageDelayMillis = Random.nextLong(1000, 3000)
+                Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page (no items on current).")
+                delay(pageDelayMillis)
+            }
+            
             val requestParams = mutableMapOf<String, String>("page" to "$page", "per_page" to "100")
             searchQuery?.takeIf { it.isNotBlank() }?.let {
                 requestParams["text"] = it.trim()
@@ -89,9 +95,6 @@ class VacancyApplyWorker(
                     Log.d(TAG, "Reached last page or processed all available pages ($page of $pages) with no new items.)")
                     break
                 }
-                val pageDelayMillis = Random.nextLong(1000, 3000)
-                Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page (no items on current).")
-                delay(pageDelayMillis)
                 continue
             }
 
@@ -112,6 +115,34 @@ class VacancyApplyWorker(
                 }
                 val vacancyName = vacancy["name"]?.toString() ?: "Вакансия (ID: $vacancyId)"
 
+                // --- Рандомный просмотр вакансии и аккаунта работодателя с задержками ---
+                if (Random.nextInt(100) < 50) { // 50% шанс просмотра вакансии
+                    try {
+                        Log.d(TAG, "Просмотр вакансии '$vacancyName'.")
+                        client.api("GET", "/vacancies/$vacancyId") // Просмотр вакансии
+                        val viewDelayMillis = Random.nextLong(3000, 5000) // 3 до 5 секунд
+                        Log.d(TAG, "Задержка на $viewDelayMillis мс после просмотра вакансии.")
+                        delay(viewDelayMillis)
+
+                        if (Random.nextInt(100) < 25) { // 25% шанс просмотра аккаунта работодателя после просмотра вакансии
+                            val employerId = (vacancy["employer"] as? Map<String, Any>)?.get("id")?.toString()
+                            if (!employerId.isNullOrEmpty()) {
+                                Log.d(TAG, "Просмотр аккаунта работодателя #$employerId для вакансии '$vacancyName'.")
+                                client.api("GET", "/employers/$employerId") // Просмотр аккаунта работодателя
+                                val employerViewDelayMillis = Random.nextLong(3000, 5000) // 3 до 5 секунд
+                                Log.d(TAG, "Задержка на $employerViewDelayMillis мс после просмотра аккаунта работодателя.")
+                                delay(employerViewDelayMillis)
+                            }
+                        }
+                    } catch (e: ApiException) {
+                        val errorMessage = "Ошибка API при просмотре '$vacancyName': ${e.message}"
+                        Log.w(TAG, errorMessage, e)
+                        showNotification("❌ $errorMessage")
+                        continue
+                    }
+                }
+
+                
                 val payload = mutableMapOf<String, Any>(
                     "resume_id" to resumeId!!,
                     "vacancy_id" to vacancyId
@@ -146,7 +177,7 @@ class VacancyApplyWorker(
                     continue
                 }
 
-                val delayMillis = Random.nextLong(1500, 3000)
+                val delayMillis = Random.nextLong(3000, 5000)
                 Log.d(TAG, "Delaying for $delayMillis ms before next application.")
                 delay(delayMillis)
             }
@@ -156,9 +187,6 @@ class VacancyApplyWorker(
                 Log.d(TAG, "Reached last page or processed all available pages ($page of $pages).")
                 break
             }
-            val pageDelayMillis = Random.nextLong(1000, 2000)
-            Log.d(TAG, "Delaying for $pageDelayMillis ms before fetching next page.")
-            delay(pageDelayMillis)
         }
     }
 
