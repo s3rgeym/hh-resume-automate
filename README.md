@@ -1,5 +1,8 @@
 # HH Resume Automate
 
+> [!IMPORTANT]
+> Приложение не может откликаться на вакансии с тестами. Для последнего используйте [hh-applicant-tool](https://github.com/s3rgeym/hh-applicant-tool).
+
 ![GitHub Release](https://img.shields.io/github/v/release/s3rgeym/hh-resume-automate)
 
 Android-риложение для автоматизации действий с резюме на HH.RU таких как рассылка откликов на вакансии и
