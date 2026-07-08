@@ -1,6 +1,9 @@
 # HH Resume Automate
 
 > [!IMPORTANT]
+> [Группа поддержки в Телеграме (для всех моих утилит и просто для общения)](https://t.me/s3rgeym_chat)
+
+> [!IMPORTANT]
 > Приложение не может откликаться на вакансии с тестами. Для последнего используйте [hh-applicant-tool](https://github.com/s3rgeym/hh-applicant-tool).
 
 ![GitHub Release](https://img.shields.io/github/v/release/s3rgeym/hh-resume-automate)
